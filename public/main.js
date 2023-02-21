@@ -32,14 +32,10 @@ function createWindow() {
   win.loadURL("http://localhost:3000");
 }
 
-const NOTIFICATION_TITLE = "Transaction Executed";
-const NOTIFICATION_BODY =
-  "Routine transaction 0x from 0x to 0x executed successfully!";
-
-function showNotification() {
+function showNotification(title, body) {
   new Notification({
-    title: NOTIFICATION_TITLE,
-    body: NOTIFICATION_BODY,
+    title: title,
+    body: body,
   }).show();
 }
 
@@ -61,8 +57,9 @@ ipcMain.on("Create:Job", async (event, arg) => {
   const abi = [arg[1]];
   const expression = arg[2];
   const params = arg[3];
+  const signer = new ethers.Wallet(arg[5], provider);
   console.log("Test called");
-  const contract = new Contract(address, abi, provider);
+  const contract = new Contract(address, abi, signer);
 
   job.push({
     address: arg[0],
@@ -74,12 +71,19 @@ ipcMain.on("Create:Job", async (event, arg) => {
 
   console.log(job);
   const getJob = cron.schedule(expression, async () => {
-    console.log(await contract[abi[0]](params));
-    console.log("Job running");
+    console.log("Cron entered");
+    try {
+      let tx = await contract[abi[0]](params);
+      console.log(tx);
+      showNotification(`${arg[4]} Transaction executed!`, tx.hash);
+    } catch (err) {
+      showNotification(`${arg[4]} Transaction failed!`, err);
+      console.log(err);
+    }
   });
 
   activeJobs.push(getJob);
-  event.sender.send("Return:JobCount", activeJobs.length);
+  event.sender.send("Return:Jobs", job);
 });
 
 ipcMain.on("Stop:Job", async (event, arg) => {
@@ -92,5 +96,11 @@ ipcMain.on("Request:JobCount", async (event, arg) => {
 });
 
 ipcMain.on("Request:JobInfo", async (event, arg) => {
+  console.log(arg[0]);
+  console.log(job[arg[0]]);
   event.sender.send("Return:JobInfo", [arg[0], job[arg[0]]]);
+});
+
+ipcMain.on("Request:Jobs", async (event, arg) => {
+  event.sender.send("Return:Jobs", job);
 });

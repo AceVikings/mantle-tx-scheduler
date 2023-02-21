@@ -9,6 +9,7 @@ const JobSettings = () => {
     abi: "",
     params: "",
     cron: "",
+    pvkey: "",
   });
 
   const create = () => {
@@ -23,6 +24,7 @@ const JobSettings = () => {
       form.cron,
       form.params,
       form.name,
+      form.pvkey,
     ]);
   };
 
@@ -75,10 +77,19 @@ const JobSettings = () => {
             onChange={handleChange}
           ></input>
         </label>
+        <label htmlFor="pvkey">
+          Private Key
+          <input
+            name="pvkey"
+            placeholder="0x"
+            onChange={handleChange}
+            type="password"
+          ></input>
+        </label>
       </form>
 
       <div className="job-submit-button" onClick={create}>
-        Click here
+        Create Job
       </div>
     </>
   );

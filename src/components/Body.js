@@ -10,7 +10,7 @@ const Body = (props) => {
       <div className="body">
         <TitleBar />
         <h1>{activeTitle}</h1>
-        <JobView />
+        <JobView activeJob={activeJob} />
       </div>
     );
   } else {

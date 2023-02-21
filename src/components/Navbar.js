@@ -7,28 +7,35 @@ const ipcRenderer = window.require("electron").ipcRenderer;
 const Navbar = (props) => {
   const { activeJob, onJobClickHandler } = props;
   const [jobCount, setCount] = useState(0);
-
-  let jobs = [];
-  for (let i = 0; i < jobCount; i++) {
-    jobs.push(
-      <JobBox
-        title={`Cron job ${i}`}
-        id={i}
-        onJobClickHandler={onJobClickHandler}
-      />
-    );
-  }
-
+  const [jobs, setJobs] = useState();
+  const [jobInfo, setJobInfo] = useState();
   useEffect(() => {
-    ipcRenderer.send("Request:JobCount");
+    ipcRenderer.send("Request:Jobs");
 
-    let event = ipcRenderer.on("Return:JobCount", (event, message) => {
-      setCount(message);
+    let event = ipcRenderer.on("Return:Jobs", (event, message) => {
+      console.log(message);
+      setCount(message.length);
+      setJobInfo(message);
     });
+
     return () => {
-      event.removeAllListeners("Return:JobCount");
+      event.removeAllListeners("Return:Jobs");
     };
   }, []);
+
+  useEffect(() => {
+    let jobsList = [];
+    for (let i = 0; i < jobCount; i++) {
+      jobsList.push(
+        <JobBox
+          title={jobInfo[i].name}
+          id={i}
+          onJobClickHandler={onJobClickHandler}
+        />
+      );
+    }
+    setJobs(jobsList);
+  }, [jobInfo]);
 
   return (
     <div className="navbar">
