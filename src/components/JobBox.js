@@ -1,7 +1,19 @@
 import React from "react";
 
-const JobBox = () => {
-  return <div className="jobbox">Cron 1</div>;
+const JobBox = (props) => {
+  const { title, id, onJobClickHandler } = props;
+  return (
+    <div
+      className="jobbox"
+      onClick={() => {
+        console.log("Here");
+        console.log(onJobClickHandler);
+        onJobClickHandler(id, title);
+      }}
+    >
+      {title}
+    </div>
+  );
 };
 
 export default JobBox;

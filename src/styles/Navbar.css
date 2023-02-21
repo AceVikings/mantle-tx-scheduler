@@ -1,15 +1,46 @@
 .navbar {
-  background-color: whitesmoke;
+  background-color: #222222;
   height: 100%;
-  width: 240px;
+  width: 280px;
   padding-top: 50px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  border-right: 1px solid;
+  border-color: hotpink;
+}
+
+.logo-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.logo-box > h1 {
+  font-size: 26px;
+  margin: 0;
+  margin-left: 5px;
+  color: hotpink;
+}
+
+.color-span {
+  color: whitesmoke;
+}
+.navabar-logo {
+  max-height: 40px;
 }
 
 .jobbox {
   border-bottom: 1px solid;
   width: 90%;
   border-color: rgba(128, 128, 128, 0.412);
+  padding-top: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  color: hotpink;
+}
+
+.jobbox:hover {
+  background-color: #191818;
 }

@@ -1,12 +1,26 @@
 import React from "react";
 import TitleBar from "./TitleBar";
+import JobSettings from "./JobSettings";
 import "../styles/Body.css";
-const Body = () => {
-  return (
-    <div className="body">
-      <TitleBar />
-    </div>
-  );
+import JobView from "./JobView";
+const Body = (props) => {
+  const { activeJob, activeTitle } = props;
+  if (activeJob !== -1) {
+    return (
+      <div className="body">
+        <TitleBar />
+        <h1>{activeTitle}</h1>
+        <JobView />
+      </div>
+    );
+  } else {
+    return (
+      <div className="body">
+        <TitleBar />
+        <JobSettings />
+      </div>
+    );
+  }
 };
 
 export default Body;

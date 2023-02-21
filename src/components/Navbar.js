@@ -1,12 +1,45 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/Navbar.css";
 import JobBox from "./JobBox";
+import logo from "../images/logo.png";
+const ipcRenderer = window.require("electron").ipcRenderer;
 
-const Navbar = () => {
+const Navbar = (props) => {
+  const { activeJob, onJobClickHandler } = props;
+  const [jobCount, setCount] = useState(0);
+
+  let jobs = [];
+  for (let i = 0; i < jobCount; i++) {
+    jobs.push(
+      <JobBox
+        title={`Cron job ${i}`}
+        id={i}
+        onJobClickHandler={onJobClickHandler}
+      />
+    );
+  }
+
+  useEffect(() => {
+    ipcRenderer.send("Request:JobCount");
+
+    let event = ipcRenderer.on("Return:JobCount", (event, message) => {
+      setCount(message);
+    });
+    return () => {
+      event.removeAllListeners("Return:JobCount");
+    };
+  }, []);
+
   return (
     <div className="navbar">
-      <h1>Ez Scheduler</h1>
-      <JobBox />
+      <div className="logo-box">
+        <img src={logo} className="navabar-logo" />
+        <h1>
+          Ez <span className="color-span">Scheduler</span>
+        </h1>
+      </div>
+      {jobs}
+      <JobBox title="+ New Job" id={-1} onJobClickHandler={onJobClickHandler} />
     </div>
   );
 };
