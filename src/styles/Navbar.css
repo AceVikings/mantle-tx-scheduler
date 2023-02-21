@@ -1,0 +1,15 @@
+.navbar {
+  background-color: whitesmoke;
+  height: 100%;
+  width: 240px;
+  padding-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.jobbox {
+  border-bottom: 1px solid;
+  width: 90%;
+  border-color: rgba(128, 128, 128, 0.412);
+}

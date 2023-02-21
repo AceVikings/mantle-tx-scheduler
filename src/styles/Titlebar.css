@@ -1,0 +1,10 @@
+.titlebar {
+  height: 30px;
+  width: 100%;
+  -webkit-app-region: drag;
+  background-color: aliceblue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid;
+}
